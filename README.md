@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D0D0D,50:33001e,100:FF007F&height=200&section=header&text=agent-memory-mesh&fontSize=56&fontColor=ffffff&fontAlignY=38&desc=Bi-Temporal%20State%20Graph%20%26%20Lossless%20Context%20Compression%20Engine%20for%20AI%20Agents&descAlignY=58&descSize=16&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D0D0D,50:33001e,100:FF007F&height=200&section=header&text=agent-memory-mesh&fontSize=56&fontColor=ffffff&fontAlignY=38&desc=Bi-Temporal%20State%20Graph%20and%20Lossless%20Context%20Compression%20Engine%20for%20AI%20Agents&descAlignY=58&descSize=16&animation=fadeIn" width="100%"/>
 
 <br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&duration=3000&pause=800&color=FF007F&center=true&vCenter=true&multiline=true&repeat=true&width=900&height=80&lines=Bi-Temporal+State+Graph+Engine+for+AI+Agents.;85%25%2B+Lossless+Token+Context+Compression.;Automatic+Superseding+%E2%80%94+Zero+Contradictions.;Benni+Master+OS+Kernel+v9.4+%E2%80%94+Skill+60+%26+61+Native." alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=20&duration=3000&pause=800&color=FF007F&center=true&vCenter=true&multiline=true&repeat=true&width=900&height=80&lines=Bi-Temporal+State+Graph+Engine+for+AI+Agents.;85%25%2B+Lossless+Token+Context+Compression.;Automatic+Superseding+%E2%80%94+Zero+Contradictions.;Benni+Master+OS+Kernel+v9.4+%E2%80%94+Skill+60+and+61+Native." alt="Typing SVG" />
 
 <br/><br/>
 
