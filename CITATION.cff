@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use Agent Memory Mesh in research or production, please cite it as below."
+authors:
+  - name: "Benni OS Core Engineering Group"
+    website: "https://bennios.dev"
+title: "Agent Memory Mesh: The Bi-Temporal State Graph & Lossless Context Compression Engine for AI Agents"
+version: 1.0.0
+date-released: 2026-10-12
+url: "https://github.com/BenniAlencar/agent-memory-mesh"
+keywords:
+  - "ai-agents"
+  - "agent-memory"
+  - "bi-temporal"
+  - "knowledge-graph"
+  - "context-compression"
+  - "model-context-protocol"
