@@ -22,14 +22,25 @@ def _iso_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _parse_dt(iso_str: str) -> datetime:
+def _parse_dt(iso_str: Any) -> datetime:
+    """Parses ISO-8601 strings into timezone-aware UTC datetime across Python 3.10+."""
+    if isinstance(iso_str, datetime):
+        if iso_str.tzinfo is None:
+            return iso_str.replace(tzinfo=timezone.utc)
+        return iso_str
+
+    clean = str(iso_str).strip()
+    if clean.endswith("Z") or clean.endswith("z"):
+        clean = clean[:-1] + "+00:00"
+
     try:
-        dt = datetime.fromisoformat(iso_str)
+        dt = datetime.fromisoformat(clean)
         if dt.tzinfo is None:
             return dt.replace(tzinfo=timezone.utc)
         return dt
     except Exception:
         return datetime.now(timezone.utc)
+
 
 
 class NodeType(str, Enum):

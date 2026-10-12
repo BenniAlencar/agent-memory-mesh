@@ -27,7 +27,7 @@ if __name__ == "__main__":
         subject="customer:acme_corp",
         predicate="plan",
         object_value="free_tier",
-        valid_from="2026-01-01T00:00:00Z",
+        valid_from="2026-01-01T00:00:00+00:00",
         provenance="sales_onboarding",
     )
 
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         subject="customer:acme_corp",
         predicate="plan",
         object_value="enterprise",
-        valid_from="2026-06-01T00:00:00Z",
+        valid_from="2026-06-01T00:00:00+00:00",
         provenance="stripe_webhook",
     )
 

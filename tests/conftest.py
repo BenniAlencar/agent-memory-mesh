@@ -24,14 +24,14 @@ def sample_graph() -> MemoryGraph:
         subject="user:alice",
         predicate="role",
         object_value="software_engineer",
-        valid_from="2026-01-01T00:00:00Z",
+        valid_from="2026-01-01T00:00:00+00:00",
     )
     # Alice gets promoted to tech lead later
     g.add_fact(
         subject="user:alice",
         predicate="role",
         object_value="tech_lead",
-        valid_from="2026-06-01T00:00:00Z",
+        valid_from="2026-06-01T00:00:00+00:00",
     )
     g.add_decision(
         subject="database_choice",
