@@ -59,10 +59,10 @@ Every memory node in Agent Memory Mesh is tracked along two orthogonal timelines
 
 ```mermaid
 graph TD
-    A["Fact A: customer plan = free_tier<br><i>Valid: Jan 2026 -> Jun 2026</i>"] -->|Automatic Supersede Edge| B["Fact B: customer plan = enterprise<br><i>Valid: Jun 2026 -> Present (Active)</i>"]
+    A["Fact A: customer plan = free_tier<br><i>Valid: Jan 2026 to Jun 2026</i>"] -->|Automatic Supersede Edge| B["Fact B: customer plan = enterprise<br><i>Valid: Jun 2026 to Present (Active)</i>"]
     B --> C{"QUERY ENGINE"}
     C -->|Query Present| D["Returns Fact B (Enterprise)<br><i>Zero Obsolete Noise</i>"]
-    C -->|Time-Travel (as-of March 2026)| E["Returns Fact A (Free Tier)<br><i>Accurate Historical Replay</i>"]
+    C -->|Time-Travel as-of March 2026| E["Returns Fact A (Free Tier)<br><i>Accurate Historical Replay</i>"]
 ```
 
 > **The Superseding Law**: When a new fact is asserted with identical `(subject, predicate)`, previous facts are automatically closed and linked via a directed `supersedes` relation. Contradictions are eliminated at write time.
