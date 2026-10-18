@@ -26,6 +26,12 @@
   Ground your agents in deterministic, time-aware knowledge graphs with lossless token compression and SHA-256 verifiable snapshots.
 </p>
 
+<br/>
+
+<img src="assets/demo.svg" alt="Agent Memory Mesh Terminal Execution Demo" width="100%"/>
+
+<br/><br/>
+
 [Quickstart](#-quickstart-in-30-seconds) •
 [Why Vector Stores Fail](#-the-fatal-flaw-of-naive-vector-search) •
 [Bi-Temporal Architecture](#-bi-temporal-knowledge-graph-architecture) •
