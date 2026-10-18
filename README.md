@@ -8,6 +8,7 @@
 
 <br/><br/>
 
+[![PyPI](https://img.shields.io/pypi/v/agent-memory-mesh?color=FF007F&style=for-the-badge&logo=pypi&logoColor=0D0D0D)](https://pypi.org/project/agent-memory-mesh/)
 [![CI](https://github.com/BenniAlencar/agent-memory-mesh/actions/workflows/ci.yml/badge.svg)](https://github.com/BenniAlencar/agent-memory-mesh/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/Tests-18%20Passed-FF007F?style=for-the-badge&logo=pytest&logoColor=white)](#-test-suite--verification)
 [![Python](https://img.shields.io/badge/Python-3.10+-FF007F?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
