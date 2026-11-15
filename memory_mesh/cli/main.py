@@ -172,5 +172,42 @@ def snapshot(output_path: str, db: str):
     console.print(f"[bold green]✔ Atomic snapshot created at:[/bold green] [cyan]{saved.resolve()}[/cyan]")
 
 
+@cli.command("doctor")
+@click.option("--json", "as_json", is_flag=True, help="Output diagnostics as JSON.")
+def doctor(as_json: bool):
+    """Probes runtime environment, bi-temporal graph, SQLite, and checkpoint sealing."""
+    from memory_mesh.tools.doctor import run_doctor
+
+    report = run_doctor()
+    if as_json:
+        click.echo(json.dumps(report.to_dict(), indent=2))
+        return
+    _print_branding()
+    status_color = "green" if report.healthy else "red"
+    console.print(f"Health: [{status_color}]{'HEALTHY' if report.healthy else 'DEGRADED'}[/{status_color}] | Python {report.python_version} | SQLite {report.sqlite_version}")
+    console.print(
+        f"Bi-Temporal: {'OK' if report.bitemporal_probe_ok else 'FAIL'} | "
+        f"SQLite: {'OK' if report.sqlite_probe_ok else 'FAIL'} | "
+        f"Checkpoint: {'OK' if report.checkpoint_probe_ok else 'FAIL'} ({report.probe_latency_ms} ms)"
+    )
+
+
+@cli.command("matrix")
+@click.option("--facts", default="25,100,250", help="Comma-separated fact counts.")
+@click.option("--reps", default=2, help="Repetitions per cell.")
+@click.option("--json", "as_json", is_flag=True, help="Output matrix results as JSON.")
+def matrix(facts: str, reps: int, as_json: bool):
+    """Runs the multi-scale compression and throughput benchmark matrix."""
+    from memory_mesh.tools.bench_matrix import BenchMatrixRunner
+
+    fact_counts = [int(s.strip()) for s in facts.split(",") if s.strip()]
+    runner = BenchMatrixRunner(fact_counts=fact_counts, reps=reps)
+    data = runner.run_matrix()
+    if as_json:
+        click.echo(json.dumps(data, indent=2))
+    else:
+        click.echo(runner.format_markdown_table(data))
+
+
 if __name__ == "__main__":
     cli()

@@ -10,7 +10,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/agent-memory-mesh?color=FF007F&style=for-the-badge&logo=pypi&logoColor=0D0D0D)](https://pypi.org/project/agent-memory-mesh/)
 [![CI](https://github.com/BenniAlencar/agent-memory-mesh/actions/workflows/ci.yml/badge.svg)](https://github.com/BenniAlencar/agent-memory-mesh/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/Tests-18%20Passed-FF007F?style=for-the-badge&logo=pytest&logoColor=white)](#-test-suite--verification)
+[![Tests](https://img.shields.io/badge/Tests-22%20Passed-FF007F?style=for-the-badge&logo=pytest&logoColor=white)](#-test-suite--verification)
 [![Python](https://img.shields.io/badge/Python-3.10+-FF007F?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![MCP](https://img.shields.io/badge/MCP-Server%20Built--In-FF007F?style=for-the-badge&logo=anthropic&logoColor=white)](https://modelcontextprotocol.io/)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-0D0D0D?style=for-the-badge&logo=apache&logoColor=FF007F)](LICENSE)
@@ -64,6 +64,38 @@ In 2026, most developers build agent memory using naive vector databases (RAG em
 Every memory node in Agent Memory Mesh is tracked along two orthogonal timelines:
 * **Valid Time**: When the fact is true in the physical world (`valid_from` → `valid_to`).
 * **Transaction Time**: When the agent system asserted or learned the fact.
+
+```text
+  LangChain / CrewAI / AutoGen / MCP Clients / Multi-Agent Swarms
+         │
+         ├──► MemoryGraph.add_fact / add_decision / query
+         └──► McpMemoryServer (JSON-RPC 2.0 Tools)
+                       │
+                       ▼
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │                         agent-memory-mesh                           │
+  │                                                                     │
+  │  ┌───────────────────┐  ┌───────────────────┐  ┌─────────────────┐  │
+  │  │ Bi-Temporal Graph │  │  Lossless Graph   │  │ Atomic          │  │
+  │  │ • Valid Time      │─►│  Compressor       │─►│ Checkpoint      │  │
+  │  │ • Transaction Time│  │  • Semantic Triple│  │ • SHA-256 Seal  │  │
+  │  │ • Auto-Supersede  │  │  • Decision Ledger│  │ • Tamper Guard  │  │
+  │  └───────────────────┘  └───────────────────┘  └─────────────────┘  │
+  │                                                                     │
+  │  ┌───────────────────┐  ┌───────────────────┐  ┌─────────────────┐  │
+  │  │ Storage Backends  │  │  Framework        │  │ Tools & CLI     │  │
+  │  │ • SQLite Graph DB │  │  Adapters         │  │ • doctor        │  │
+  │  │ • In-Memory       │  │  • LangChain      │  │ • bench_matrix  │  │
+  │  │ • BaseMemoryABC   │  │  • CrewAI / MCP   │  │ • store/query   │  │
+  │  └───────────────────┘  └───────────────────┘  └─────────────────┘  │
+  └─────────────────────────────────────────────────────────────────────┘
+         │                                         │
+         ▼                                         ▼
+   SQLite Bi-Temporal Store                 SHA-256 Sealed Snapshots
+   Zero-Contradiction Ground Truth          85%+ Token-Reduced Context
+```
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full internal specification.
 
 ```mermaid
 graph TD
@@ -251,6 +283,71 @@ memory-mesh compress
 
 # Export SHA-256 sealed checkpoint
 memory-mesh snapshot backup.json
+
+# Probe environment, bi-temporal graph, SQLite & checkpoint integrity
+memory-mesh doctor
+
+# Run multi-scale compression & throughput benchmark matrix
+memory-mesh matrix --facts 25,100,250
+```
+
+<br/>
+
+<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/dark.png" width="100%"/>
+
+## 📁 Project Structure
+
+```text
+agent-memory-mesh/
+├── docs/
+│   └── ARCHITECTURE.md                  # Skill 60/61 bi-temporal graph specification
+├── examples/
+│   ├── 01_quickstart_bitemporal.py      # Valid-time superseding & time-travel queries
+│   ├── 02_lossless_compression.py       # 85%+ token reduction vs raw chat logs
+│   ├── 03_atomic_checkpoint.py          # SHA-256 sealed snapshot save/restore
+│   ├── 04_langchain_agent_memory.py     # LangChain memory adapter integration
+│   └── 05_mcp_memory_server.py          # Model Context Protocol (MCP) memory server
+├── memory_mesh/
+│   ├── __init__.py                      # Public package exports
+│   ├── py.typed                         # PEP 561 type marker
+│   ├── version.py                       # Version, doctrine & maintainer metadata
+│   ├── adapters/
+│   │   ├── __init__.py                  # Adapter exports
+│   │   ├── crewai.py                    # CrewAI shared memory adapter
+│   │   ├── langchain.py                 # LangChain memory adapter
+│   │   └── mcp_server.py                # Native MCP JSON-RPC 2.0 server
+│   ├── cli/
+│   │   ├── __init__.py                  # CLI package marker
+│   │   └── main.py                      # Click + Rich CLI (info, store, query, compress, doctor, matrix)
+│   ├── core/
+│   │   ├── __init__.py                  # Core graph exports
+│   │   ├── checkpoint.py                # SHA-256 sealed atomic graph snapshots
+│   │   ├── compressor.py                # Lossless semantic triple & decision compressor
+│   │   ├── graph.py                     # Bi-temporal MemoryGraph with auto-supersede
+│   │   └── models.py                    # MemoryNode, MemoryRelation & BiTemporalInterval
+│   ├── storage/
+│   │   ├── __init__.py                  # Storage backend exports
+│   │   ├── base.py                      # Abstract BaseMemoryStorage interface
+│   │   ├── memory.py                    # Zero-I/O InMemoryStorage backend
+│   │   └── sqlite.py                    # Persistent SQLite graph storage backend
+│   └── tools/
+│       ├── __init__.py                  # Diagnostics & benchmark tool exports
+│       ├── bench_matrix.py              # Multi-scale compression & throughput matrix
+│       └── doctor.py                    # Environment, bi-temporal & SQLite probe
+├── scripts/
+│   ├── benchmark_compression_ratio.py   # Token compression & throughput benchmark
+│   └── gate_bitemporal_integrity.py     # Fail-closed bi-temporal & tamper gate runner
+└── tests/
+    ├── __init__.py                      # Test suite package marker
+    ├── conftest.py                      # Shared pytest fixtures
+    ├── test_adapters.py                 # LangChain, CrewAI & MCP adapter tests
+    ├── test_checkpoint_restore.py       # Snapshot roundtrip & tamper detection tests
+    ├── test_cli.py                      # Click CLI command tests
+    ├── test_compressor.py               # Lossless compression & token savings tests
+    ├── test_graph_and_causality.py      # Superseding, time-travel & decision tests
+    ├── test_models_and_bitemporal.py    # Temporal interval & node sealing tests
+    ├── test_sqlite_storage.py           # SQLite node & relation persistence tests
+    └── test_tools_and_scripts.py        # Doctor, bench_matrix & gate script tests
 ```
 
 <br/>
